@@ -1,5 +1,4 @@
 socket
-threading
 random
 time
 tkinter
