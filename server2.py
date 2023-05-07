@@ -3,7 +3,7 @@ import threading
 
 #if server is online so provide private ip add here
 host='127.0.0.1'
-port=9000
+port=8501
 
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
