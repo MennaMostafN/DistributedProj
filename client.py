@@ -6,7 +6,7 @@ from tkinter import simpledialog
 
 #if server is online so provide public ip add here
 host='127.0.0.1'
-port=8501
+port=8051
 
 #clients will be objects
 class client:
@@ -94,6 +94,4 @@ class client:
                 self.sock.close()
                 break
 
-
-print(tkinter.TclVersion)
 client = client(host, port)
