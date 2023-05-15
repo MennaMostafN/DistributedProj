@@ -1,9 +1,10 @@
 import socket
 import threading
+import sys
 
 #if server is online so provide private ip add here
 host='127.0.0.1'
-port=9000
+port=8501
 
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
@@ -56,6 +57,8 @@ def receive():
         thread=threading.Thread(target=handle, args=(client,))
         thread.start()
 
+print(sys.executable)
 print("server running")
 receive()
+
 #handle-handles individual connections from the client(second client is handled here)

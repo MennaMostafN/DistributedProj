@@ -2,8 +2,10 @@ import socket
 import threading
 
 #if server is online so provide private ip add here
+import tkinter
+
 host='127.0.0.1'
-port=9000
+port=8501
 
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
@@ -12,23 +14,9 @@ server.listen()
 
 clients = []
 nicknames = []
-
-#broadcast-sends a message to all connected clients
-def broadcast(message):
-    for client in clients:import socket
-import threading
 
 #if server is online so provide private ip add here
-host='127.0.0.1'
-port=9000
 
-server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-server.bind((host,port))
-
-server.listen()
-
-clients = []
-nicknames = []
 
 #broadcast-sends a message to all connected clients
 def broadcast(message):
@@ -253,7 +241,9 @@ def receive():
         thread=threading.Thread(target=handle, args=(client,))
         thread.start()
 
+
 print("server running")
+print(tkinter.TclVersion)
 receive()
 #handle-handles individual connections from the client(second client is handled here)
 
