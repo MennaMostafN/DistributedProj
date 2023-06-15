@@ -13,13 +13,12 @@ import random
 password = "pZu532OuO1urq4yV"
 connection_string = f"mongodb+srv://m:{password}@cluster0.lm8lset.mongodb.net/?retryWrites=true&w=majority"
 
-
 client = MongoClient(connection_string)
 databaseMain = client.carGame
 databaseReplica = client.carGameReplica
 databases = [databaseMain, databaseReplica]
 
-# Check database connection
+#Check database connection
 def checkDatabaseConnection():
     global database
     global databases
@@ -42,15 +41,28 @@ def checkDatabaseConnection():
 
 
 
-
-# Set active players to 0 at the beginning in both dbs main and replica
+#Set active players to 0 at the beginning in both dbs main and replica
 forallfields = {}
 activePlayersStart = {"$set": {"activePlayers": 0, "score": 0, "name": None, "messages":[]}}
 checkDatabaseConnection()
 for d in databases:
     d.player.update_many(forallfields, activePlayersStart)
 
+def databaseWrite(data, player):
+    checkDatabaseConnection()
+    # Took data object recieved from client and store it to both databases Main and Replica >> Hnaaaaaaa el store started
+    thisPlayer = data
+    field = {"id": player}
+    newInfo = {
+        "$set": {"xPos": thisPlayer.x, "yPos": thisPlayer.y, "score": thisPlayer.score, "name": thisPlayer.nickname,
+                 "activePlayers": thisPlayer.activePlayers, "messages": thisPlayer.messages}}
+    for d in databases:
+        d.player.update_many(field, newInfo)
 
+    # To save the messages list in all players at both databases so that when a disconnected player connects again, view the current messages
+    for d in databases:
+        for document in d.player.find():
+            d.player.update_one({"_id": document["_id"]}, {"$set": {"messages": thisPlayer.messages}})
 
 
 def get_from_db():
@@ -114,7 +126,7 @@ def get_updated_info():
 
 
 
-server = socket.gethostbyname(socket.gethostname())
+server = "192.168.1.4"
 port = 5555
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -130,8 +142,8 @@ print("Waiting for a connection, Server Started")
 
 # Make infoFromDb in this format [(0, 0, 418, 400, 3, 88, 500), (1, 1, 358, 160, 3, 88, 555), (2, 2, 478, 280, 3, 88, 477), (3, 3, 258, 260, 3, 88, 888)]
 
-infoFromDb = get_from_db()
-print(infoFromDb, "ahu da el value bt3 info from db awel ma aad5ol")
+#infoFromDb = get_from_db()
+#print(infoFromDb, "ahu da el value bt3 info from db awel ma aad5ol")
 
 
 obsL_x = [random.randrange(73,188),random.randrange(188,303),random.randrange(73,188),random.randrange(188,303),random.randrange(73,188),random.randrange(188,303),random.randrange(73,188)]
@@ -139,8 +151,8 @@ obsR_x = [random.randrange(330,475),random.randrange(475,620),random.randrange(3
 obsL_img = [0,1,2,3,1,0,2]
 obsR_img = [1,2,3,0,3,1,0]
 
-info = [Car(infoFromDb[0][0],infoFromDb[0][1],355,400, obsL_x, obsR_x, obsL_img, obsR_img), Car(infoFromDb[1][0],infoFromDb[1][1],490,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[2][0],infoFromDb[2][1],215,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[3][0],infoFromDb[3][1],600,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[4][0],infoFromDb[4][1],100,400, obsL_x, obsR_x, obsL_img, obsR_img)]
-
+#info = [Car(infoFromDb[0][0],infoFromDb[0][1],355,400, obsL_x, obsR_x, obsL_img, obsR_img), Car(infoFromDb[1][0],infoFromDb[1][1],490,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[2][0],infoFromDb[2][1],215,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[3][0],infoFromDb[3][1],600,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(infoFromDb[4][0],infoFromDb[4][1],100,400, obsL_x, obsR_x, obsL_img, obsR_img)]
+info = [Car(300,400,355,400, obsL_x, obsR_x, obsL_img, obsR_img), Car(300,400,490,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(300,400,215,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(300,400,600,400, obsL_x, obsR_x, obsL_img, obsR_img),Car(300,400,100,400, obsL_x, obsR_x, obsL_img, obsR_img)]
 
 # Player Unique ID
 currentPlayer = 0
@@ -167,19 +179,9 @@ def threaded_client(conn, player):
 
             sec = round(time.time() - startTime)
             print(sec)
-            if sec % 5 == 0:
-                checkDatabaseConnection()
-                # Took data object recieved from client and store it to both databases Main and Replica >> Hnaaaaaaa el store started
-                thisPlayer = data
-                field = {"id": player}
-                newInfo = {"$set": {"xPos": thisPlayer.x, "yPos": thisPlayer.y,"score":thisPlayer.score,"name":thisPlayer.nickname, "activePlayers":thisPlayer.activePlayers, "messages":thisPlayer.messages}}
-                for d in databases:
-                    d.player.update_many(field, newInfo)
+            if sec % 10 == 0:
+                start_new_thread(databaseWrite, (data, player))
 
-                # To save the messages list in all players at both databases so that when a disconnected player connects again, view the current messages
-                for d in databases:
-                    for document in d.player.find():
-                        d.player.update_one({"_id": document["_id"]},{"$set": {"messages": thisPlayer.messages}})
 
 
             if not data:
@@ -220,21 +222,28 @@ def threaded_client(conn, player):
         d.player.update_many(field, newInfo)
     conn.close()
 
+def startServer():
+    while True:
+        global currentPlayer
+        global activePlayers
+        conn, addr = s.accept()
+        print("Connected to:", addr)
 
-while True:
-    conn, addr = s.accept()
-    print("Connected to:", addr)
+        # If a player disconnects (disconnected player != 11), then we will check if the player trying to connect new or trying to reconnect from his addr
+        # if an old player trying to connect, get his last info from any db
+        # checkDatabaseConnection()
+        # get_updated_info()
 
-    # If a player disconnects (disconnected player != 11), then we will check if the player trying to connect new or trying to reconnect from his addr
-    # if an old player trying to connect, get his last info from any db
-    # checkDatabaseConnection()
-    # get_updated_info()
+        start_new_thread(threaded_client, (conn, currentPlayer))
+        info[currentPlayer].active = 1
+        print(info[currentPlayer].active, "now i connected")
+        currentPlayer += 1
+        allfields = {}
+        activePlayers += 1
 
-    start_new_thread(threaded_client, (conn, currentPlayer))
-    info[currentPlayer].active = 1
-    print(info[currentPlayer].active,"now i connected")
-    currentPlayer += 1
-    allfields = {}
-    activePlayers +=1
+
+startServer()
+
+
 
 

@@ -11,7 +11,7 @@ import pickle
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = socket.gethostbyname(socket.gethostname())
+        self.server = "196.132.104.27"
         self.port = 5555
         self.addr = (self.server, self.port)
         self.p = self.connect()
@@ -136,9 +136,6 @@ class ObstaclesLeft():
         self.score = 0
         self.obs = obs
         self.finish = finish
-
-
-
     def draw(self, win):
         win.blit(self.img, (self.x, self.y))
 
@@ -483,16 +480,10 @@ def redrawWindow(win,images,car, car1,car2,car3,car4,roadx,roady, obstacle,obsta
 # In python 0,0 is top left
 images = [(borderY,(0,0)),(window,(0,0)),(road,(0,0))]
 
-
 n = Network()
-
-
 
 text_input = ""
 text_input_render = text_area_font.render("", True, text_area_font_color)
-
-
-
 
 def main(inputText):
     run = True
