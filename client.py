@@ -5,13 +5,12 @@ from pygame import mixer
 import socket
 import pickle
 
-#192.168.1.14
-#13.51.198.41
+
 # ----------------------------------------------Client Networking-------------------------------------------------------
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "192.168.1.14"
+        self.server = "13.51.198.41"
         self.port = 6666
         self.addr = (self.server, self.port)
         self.p = self.connect()
