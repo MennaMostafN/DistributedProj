@@ -1,5 +1,5 @@
 # DistributedProj
-# 2d Car Game with Chat
+## 2d Car Game with Chat
 ## Installation :
   Download client file and data files including images
   install python version 2.9 or more updated
@@ -14,21 +14,21 @@
   arrows for movement
   characters for chatting 
   tab for starting 
-# Technologies Used:
+## Technologies Used:
   pygame
   socket
   pickle
   time
   sys
   _thread
-# Authors:
+## Authors:
   Mohamed Hany El-Sayed
   Mazen Tarek Samy
   Menna Mostafa Nagiub
   Nour Hany Abd-allah
-# License:
+## License:
   tlsAllowInvalidcertificates = True
-# Requirements:
+## Requirements:
   Windows 7 or newer
   python 2.9 or newer
   keyboard
