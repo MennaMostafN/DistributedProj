@@ -5,12 +5,13 @@ from pygame import mixer
 import socket
 import pickle
 
-
+#192.168.1.14
+#13.51.198.41
 # ----------------------------------------------Client Networking-------------------------------------------------------
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "13.51.198.41"
+        self.server = "192.168.1.14"
         self.port = 6666
         self.addr = (self.server, self.port)
         self.p = self.connect()
@@ -555,7 +556,10 @@ def main(inputText):
         for p in players:
             p.messages = messages
             if p.winner == True:
+                started = True
                 chatOnly = True
+
+
 
 
 
@@ -564,7 +568,7 @@ def main(inputText):
 
         while not started:
             font = pygame.font.Font(None, 50)
-            if car.activePlayers <= 2:
+            if car.activePlayers <= 1:
                 text = font.render("Waiting for opponents.. ", True, 'white')
             else:
                 text = font.render("You May Start Now! ", True, 'white')
@@ -820,7 +824,7 @@ def main(inputText):
                         if value[0] > 0:
                             text_rank = font.render(str(key) + " score: " + str(value[0]), True, 'white')
                             win.blit(text_rank, (x, y))
-                            y = y + 23
+                            y = y + 28
                 pygame.display.update()
 
 
