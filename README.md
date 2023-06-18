@@ -22,10 +22,10 @@
   sys
   _thread
 ## Authors:
-  Mohamed Hany El-Sayed
-  Mazen Tarek Samy
-  Menna Mostafa Nagiub
-  Nour Hany Abd-allah
+  - Mohamed Hany El-Sayed
+  - Mazen Tarek Samy
+  = Menna Mostafa Nagiub
+  - Nour Hany Abd-allah
 ## License:
   tlsAllowInvalidcertificates = True
 ## Requirements:
