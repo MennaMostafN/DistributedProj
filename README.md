@@ -1,16 +1,16 @@
 # DistributedProj
 # 2d Car Game with Chat
-# Installation :
+## Installation :
   Download client file and data files including images
   install python version 2.9 or more updated
   install pygame
-# Usage :
+## Usage :
   open client file 
   change ip address to the given public ip address of the deployed instance
   mongo access must be given to the server deployed upon the Public Ipv4 Address
   run the client file
   wait for minimum number of online active players to press tab and start the game
-# Features : 
+## Features : 
   arrows for movement
   characters for chatting 
   tab for starting 
