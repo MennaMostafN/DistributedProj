@@ -1,6 +1,6 @@
 # DistributedProj
 2d Car Game with Chat
-Installition :
+Installation :
   Download client file and data files including images
   install python version 2.9 or more updated
   install pygame
